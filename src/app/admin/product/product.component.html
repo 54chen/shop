@@ -1,1 +1,32 @@
-<p>product works!</p>
+<h2>Products</h2>
+
+<div *ngFor="let product of products">
+  <hr />
+  <span class="name">SKU: {{product.id}}</span>
+|
+  <span *ngIf="product!==editProduct; else editInput2" class="name">Name: {{product.name}}</span>
+  <ng-template #editInput2>
+    Name:<input #productEditInput type="text" class="name" [value]="editProduct!.name" (blur)="editName(productEditInput.value)" (keydown.enter)="editName(productEditInput.value)"/>
+  </ng-template>
+|
+  <span *ngIf="product!==editProduct; else editInput3" class="name">Description: {{product.description}}</span>
+  <ng-template #editInput3>
+    Description:<input #productEditInput type="text" class="name" [value]="editProduct!.description" (blur)="editDesc(productEditInput.value)" (keydown.enter)="editDesc(productEditInput.value)"/>
+  </ng-template>
+|
+  <span *ngIf="product!==editProduct; else editInput4" class="name">Price: {{product.price}}</span>
+  <ng-template #editInput4>
+    Price:<input #productEditInput type="text" class="name" [value]="editProduct!.price" (blur)="editPrice(productEditInput.value)" (keydown.enter)="editPrice(productEditInput.value)"/>
+  </ng-template>
+|
+  <button *ngIf="product!==editProduct" type="button" class="edit" title="edit product"
+    (click)="editProduct = product">
+    Edit
+  </button>
+|
+  <button type="button" class="delete" title="delete product"
+    (click)="delete(product)">
+    Delete
+  </button>
+
+</div>

@@ -1,9 +1,8 @@
 <h2>Products</h2>
-
-<div *ngFor="let product of products">
-  <hr />
+<div class="tile-container">
+<div class="tile" *ngFor="let product of products">
   <h3>
-    <p *ngIf="product.SKU">SKU: {{ product.SKU }}</p>
+    <p *ngIf="product.id">SKU: {{ product.id }}</p>
     <a [title]="product.name + ' details'">
       {{ product.name }}
     </a>
@@ -15,4 +14,5 @@
 
   <button type="button" (click)="addToCart(product)">Buy</button>
 
+</div>
 </div>

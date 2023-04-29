@@ -9,13 +9,16 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './product/product-list.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { CartComponent } from './cart/cart.component';
-import { OrderComponent } from './order/order.component';
 
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 
+import { HttpErrorHandler } from './http-error-handler.service';
+import { MessageService } from './message.service';
+
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
+import { MessagesComponent } from './messages/messages.component';
  
 @NgModule({
   declarations: [
@@ -23,7 +26,7 @@ import { InMemoryDataService } from './in-memory-data.service';
     ProductListComponent,
     TopBarComponent,
     CartComponent,
-    OrderComponent
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,9 +36,16 @@ import { InMemoryDataService } from './in-memory-data.service';
     AppRoutingModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false })
+      InMemoryDataService, {
+        dataEncapsulation: false,
+        passThruUnknownUrl: true,
+        put204: false // return entity after PUT/update
+      }
+    )
   ],
-  providers: [],
+  providers: [ 
+    HttpErrorHandler,
+    MessageService,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

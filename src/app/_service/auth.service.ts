@@ -18,12 +18,10 @@ export class AuthService {
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
-  private userUrl = 'api/users?username=';
+  private usernameUrl = 'api/users?username=';
+  private userIdUrl = 'api/users/';
 
-  constructor(
-      private router: Router,
-      private http: HttpClient
-  ) {
+  constructor(private router: Router,private http: HttpClient ) {
       this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
       this.user = this.userSubject.asObservable();
   }
@@ -53,13 +51,20 @@ export class AuthService {
   }
 
   getUsersByUsername(username: string): Observable<User[]> {
-    return this.http.get<User[]>(this.userUrl + username)
+    return this.http.get<User[]>(this.usernameUrl + username)
       .pipe(
         tap(_ => console.log('fetched users')),
         catchError(this.handleError<User[]>('getUsers', []))
       );
   }
 
+  getUsersById(id: number): Observable<User> {
+    return this.http.get<User>(this.userIdUrl + id)
+      .pipe(
+        tap(_ => console.log('fetched users')),
+        catchError(this.handleError<User>('getUsers'))
+      );
+  }
 
   /**
    * Handle Http operation that failed.

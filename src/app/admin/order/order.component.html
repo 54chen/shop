@@ -1,1 +1,33 @@
-<p>order works!</p>
+<h2>Orders</h2>
+<div class="details" *ngIf="user">
+  <span>Name: {{user.firstName}}, {{user.lastName}}</span>
+  <span>email: {{user.email}}</span>
+  <span>Date: {{orders[0].time*1000 | date: "yyyy-MM-dd HH:mm:ss"}}</span>
+  <div class="history" *ngFor="let h of history">
+    <span>Product: {{h.name}} ({{h.sku}})</span>
+    <span>history price: {{h.price}}</span>
+    <span>current price: {{h.current}}</span>
+    <span>count: {{h.count}}</span>
+  </div>
+  <hr />
+</div>
+<div class="order" *ngFor="let order of orders">
+
+  <span>Order_ID: {{order.id}}</span>
+  <span>User_ID: {{order.owner}}</span>
+  <span>Product_ID: {{order.sku}}</span>
+  <span>Product_price: {{order.price}}</span>
+  <span>Count of Products: {{order.count}}</span>
+  <span>Time: {{order.time*1000 | date: "yyyy-MM-dd HH:mm:ss"}}</span>
+
+  <button type="button" class="details" title="show details"
+  (click)="show(order)">
+  open
+</button>
+
+<button type="button" class="delete" title="delete order"
+(click)="delete(order)">
+Delete
+</button>
+<hr />
+</div>

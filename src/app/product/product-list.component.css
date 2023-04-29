@@ -1,0 +1,11 @@
+.tile-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tile {
+  width: 30%;
+  border: 1px solid #eee;
+  padding: 8px 16px;
+  margin: auto;
+}

@@ -18,4 +18,4 @@ import { AdminComponent } from './admin/admin.component';
     AdminRoutingModule
   ]
 })
-export class AdminModule { }
+export class AdminModule { } 
