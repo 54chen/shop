@@ -1,0 +1,57 @@
+<h2>Login</h2>
+<p>{{message}}</p>
+
+<p *ngIf="authService.userValue">You do not get the access to Admin.</p>
+<form *ngIf="!authService.userValue" [formGroup]="loginForm" (ngSubmit)="onSubmit()" #formDir="ngForm">
+
+  <div [hidden]="formDir.submitted">
+    <div class="form-group">
+      <label for="username">User Name</label>
+      <input type="text" id="username" placeholder="Your account" class="form-control"
+            formControlName="username" required>
+
+      <div *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+          class="alert alert-danger">
+
+        <div *ngIf="username?.errors?.['required']">
+          Username is required.
+        </div>
+        <div *ngIf="username?.errors?.['minlength']">
+          Username must be at least 4 characters long.
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Your password" class="form-control"
+            formControlName="password" required>
+
+      <div *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+          class="alert alert-danger">
+
+        <div *ngIf="password?.errors?.['required']">
+          Password is required.
+        </div>
+        <div *ngIf="password?.errors?.['minlength']">
+          Password must be at least 8 characters long.
+        </div>
+
+      </div>
+    </div>
+
+    <p *ngIf="loginForm.invalid">Complete the form to enable the Submit button.</p>
+    <button type="submit"
+            class="btn btn-default"
+            [disabled]="loginForm.invalid">Submit</button>
+    <button type="button" class="btn btn-default"
+           (click)="formDir.resetForm({})">Reset</button>
+  </div>
+</form>
+
+
+<p>
+  <button type="button" (click)="authService.logout()"  *ngIf="authService.userValue">Logout</button>
+</p>

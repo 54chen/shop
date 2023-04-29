@@ -1,0 +1,10 @@
+<h2>Admin</h2>
+<nav style="justify-content: space-between">
+  
+    <a style="padding:8px 16px" routerLink="./" routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Manage Products</a>
+
+    <a style="padding:8px 16px" routerLink="./orders" routerLinkActive="active" ariaCurrentWhenActive="page">Manage Orders</a>
+
+</nav>
+<router-outlet></router-outlet>
