@@ -63,7 +63,7 @@ export class OrderService {
     const options = { params: new HttpParams().set('owner', id).append('time', time) };
     return this.http.get<Order[]>(this.ordersUrl, options)
       .pipe(
-        catchError(this.handleError<Order[]>('searchOrders', []))
+        catchError(this.handleError<Order[]>('getOrdersByUserAndTime', []))
       );
   }
 }

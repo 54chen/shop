@@ -83,7 +83,7 @@ describe('AuthService', () => {
       expect(response).toEqual(true);
     });
 
-    const request = httpMock.expectOne('api/users?username='+user.username);
+    const request = httpMock.expectOne('api/users?username='+user.username+'&password='+user.password);
     expect(request.request.method).toBe('GET');
     request.flush([user]);
   });

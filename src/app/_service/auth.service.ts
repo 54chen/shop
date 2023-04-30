@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, delay, map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
 
 import { Role, User } from '../_models/user';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
@@ -41,9 +41,9 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<boolean>  {
-    return this.getUsersByUsername(username).pipe(map(users => {
+    return this.geUserByNameAndPassword(username, password).pipe(map(users => {
       let ret = users.some(user=>{
-        if (user.username == username && user.password == password) {
+        if (user.username == username) {
           localStorage.setItem('user', JSON.stringify(user));
           this.userSubject.next(user);
           return true;
@@ -65,6 +65,14 @@ export class AuthService {
       .pipe(
         tap(_ => console.log('fetched users')),
         catchError(this.handleError<User[]>('getUsers', []))
+      );
+  }
+
+  geUserByNameAndPassword(username: string, password: string): Observable<User[]> {
+    const options = { params: new HttpParams().set('username', username).append('password', password) };
+    return this.http.get<User[]>(this.usersUrl, options)
+      .pipe(
+        catchError(this.handleError<User[]>('geUserByNameAndPassword', []))
       );
   }
 
