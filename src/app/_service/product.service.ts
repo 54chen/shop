@@ -27,14 +27,14 @@ export class ProductService {
     this.handleError = httpErrorHandler.createHandleError('ProductService');
   }
 
-   /** GET heroes from the server */
+   /** GET productes from the server */
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.productsUrl)
       .pipe(
         catchError(this.handleError('getProducts', []))
       );
   }
-  /** PUT: update the hero on the server. Returns the updated hero upon success. */
+  /** PUT: update the product on the server. Returns the updated product upon success. */
   updateProduct(product: Product): Observable<Product> {
     httpOptions.headers =
       httpOptions.headers.set('Authorization', 'my-new-auth-token');

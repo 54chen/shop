@@ -3,6 +3,7 @@ import { Product } from '../_models/product';
 
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../_service/product.service';
+import { CartService } from '../_service/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -13,7 +14,8 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -21,14 +23,9 @@ export class ProductListComponent implements OnInit {
       products => (this.products = products)
     );
   }
-
-  share() {
-    window.alert('The product has been shared!');
-  }
-
   addToCart(product: Product) {
-    // this.cartService.addToCart(product);
-    // window.alert('Your product has been added to the cart!');
+    this.cartService.addToCart(product);
+    window.alert('Your product has been added to the cart but you need to login to checkout!');
   }
 }
 

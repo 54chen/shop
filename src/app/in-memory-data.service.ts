@@ -84,7 +84,7 @@ export class InMemoryDataService implements InMemoryDbService {
     return {users, products, orders};
   }
 
-  genId<T extends { id: any }>(collection: T[], collectionName: string): any {
+  genId<T extends { id: any }>(collection: T[]): any {
     if (!collection || collection.length === 0) {
       return 1;
     }

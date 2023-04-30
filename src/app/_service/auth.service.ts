@@ -6,6 +6,14 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Role, User } from '../_models/user';
+import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    Authorization: 'my-auth-token'
+  })
+};
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +22,18 @@ export class AuthService {
 
   private userSubject: BehaviorSubject<User | null>;
   public user: Observable<User | null>;
+  private handleError: HandleError;
 
   // store the URL so we can redirect after logging in
   redirectUrl: string | null = null;
 
   private usernameUrl = 'api/users?username=';
-  private userIdUrl = 'api/users/';
+  private usersUrl = 'api/users';
 
-  constructor(private router: Router,private http: HttpClient ) {
+  constructor(private router: Router,private http: HttpClient,httpErrorHandler: HttpErrorHandler ) {
       this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
       this.user = this.userSubject.asObservable();
+      this.handleError = httpErrorHandler.createHandleError('AuthService');
   }
 
   public get userValue() {
@@ -58,32 +68,23 @@ export class AuthService {
       );
   }
 
-  getUsersById(id: number): Observable<User> {
-    return this.http.get<User>(this.userIdUrl + id)
+  getUsersById(id: number|undefined): Observable<User> {
+    return this.http.get<User>(this.usersUrl + "/" + id)
       .pipe(
         tap(_ => console.log('fetched users')),
         catchError(this.handleError<User>('getUsers'))
       );
   }
 
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   *
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+  /** PUT: update the name and email on the server. Returns the updated user upon success. */
+  updateUser(user: User): Observable<User> {
+    httpOptions.headers =
+      httpOptions.headers.set('Authorization', 'my-new-auth-token');
 
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      console.error(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
+    return this.http.put<User>(this.usersUrl, user, httpOptions)
+      .pipe(
+        catchError(this.handleError('updateUser', user))
+      );
   }
+
 }

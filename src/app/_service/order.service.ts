@@ -43,7 +43,7 @@ export class OrderService {
       );
   }
 
-  deleteOrder(id: number): Observable<unknown> {
+  deleteOrder(id: number|undefined): Observable<unknown> {
     const url = `${this.ordersUrl}/${id}`; // DELETE api/orders/42
     return this.http.delete(url, httpOptions)
       .pipe(
@@ -51,8 +51,16 @@ export class OrderService {
       );
   }
 
-  getOrdersByUserAndTime(userId:number, time:number): Observable<Order[]> {
-    const options = { params: new HttpParams().set('owner', userId).append('time', time) };
+  postOrder(order: Order): Observable<unknown> {
+    const url = `${this.ordersUrl}`; //POST api/orders
+    return this.http.post<Order>(url, order)
+      .pipe(
+        catchError(this.handleError('postOrder',order))
+      );
+  }
+  getOrdersByUserAndTime(userId:number|undefined, time:number): Observable<Order[]> {
+    const id = userId?userId:0;
+    const options = { params: new HttpParams().set('owner', id).append('time', time) };
     return this.http.get<Order[]>(this.ordersUrl, options)
       .pipe(
         catchError(this.handleError<Order[]>('searchOrders', []))

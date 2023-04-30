@@ -1,8 +1,79 @@
 <h3>Cart</h3>
-
+<div *ngIf="result">
+We have recieved your request. Will get touch with you very soon.
+</div>
+<div *ngIf="!result">
 <div class="cart-item" *ngFor="let item of items">
   <span>{{ item.name }}</span>
   <span>{{ item.price | currency }}</span>
 </div>
 
 <button *ngIf="items.length>0" type="button" (click)="clearCart()">Clear</button>
+<hr />
+
+<form *ngIf="items.length>0" [formGroup]="cartForm" (ngSubmit)="onSubmit()" #formDir="ngForm">
+
+  <div [hidden]="formDir.submitted">
+    <div class="form-group">
+      <label for="firstname">First Name</label>
+      <input type="text" id="firstname" [value]="this.user?.firstName || ''" class="form-control"
+            formControlName="firstname" required>
+
+      <div *ngIf="firstname?.invalid && (firstname?.dirty || firstname?.touched)"
+          class="alert alert-danger">
+
+        <div *ngIf="firstname?.errors?.['required']">
+          Firstname is required.
+        </div>
+        <div *ngIf="firstname?.errors?.['minlength']">
+          Firstname must be at least 1 characters long.
+        </div>
+
+      </div>
+    </div>
+ 
+    <div class="form-group">
+      <label for="lastname">Last Name</label>
+      <input type="text" id="lastname" [value]="this.user?.lastName||''" class="form-control"
+            formControlName="lastname" required>
+
+      <div *ngIf="lastname?.invalid && (lastname?.dirty || lastname?.touched)"
+          class="alert alert-danger">
+
+        <div *ngIf="lastname?.errors?.['required']">
+          Lastname is required.
+        </div>
+        <div *ngIf="lastname?.errors?.['minlength']">
+          Lastname must be at least 1 characters long.
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">email</label>
+      <input type="text" id="email" [value]="this.user?.email||''" class="form-control"
+            formControlName="email" required>
+
+      <div *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+          class="alert alert-danger">
+
+        <div *ngIf="email?.errors?.['required']">
+          Email is required.
+        </div>
+        <div *ngIf="email?.errors?.['email']">
+          This is not a valid email address.
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="cartForm.invalid">Complete the form to enable the Submit button.</p>
+    <button type="submit"
+            class="btn btn-default"
+            [disabled]="cartForm.invalid">Submit</button>
+    <button type="button" class="btn btn-default"
+           (click)="formDir.resetForm({})">Reset</button>
+  </div>
+
+</form>
+</div>
