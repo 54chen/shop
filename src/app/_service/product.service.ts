@@ -13,7 +13,11 @@ const httpOptions = {
     Authorization: 'my-auth-token'
   })
 };
-
+/**
+ * This service provides functionality for products.
+ *
+ * @dependencies HttpClient,HttpErrorHandler
+ */
 @Injectable({
   providedIn: 'root'
 })

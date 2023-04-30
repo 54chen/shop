@@ -13,6 +13,11 @@ const httpOptions = {
   })
 };
 
+/**
+ * This service provides functionality for orders.
+ *
+ * @dependencies HttpClient,HttpErrorHandler
+ */
 @Injectable({
   providedIn: 'root'
 })

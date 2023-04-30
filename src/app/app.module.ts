@@ -19,7 +19,12 @@ import { MessageService } from './message.service';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
 import { MessagesComponent } from './messages/messages.component';
- 
+
+/**
+ * This module provides functionality for common users.
+ *
+ */
+
 @NgModule({
   declarations: [
     AppComponent,

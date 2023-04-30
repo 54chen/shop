@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../_models/product';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
 
+/**
+ * This service provides functionality for cart operation.
+ *
+ * @dependencies 
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   items: Product[] = [];
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   addToCart(product: Product) {
     this.items.push(product);

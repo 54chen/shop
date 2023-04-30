@@ -15,6 +15,11 @@ const httpOptions = {
   })
 };
 
+/**
+ * This service provides functionality for managing user accounts.
+ *
+ * @dependencies HttpClient,HttpErrorHandler
+ */
 @Injectable({
   providedIn: 'root',
 })
