@@ -9,7 +9,6 @@ import { Order } from '../_models/order';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
   items = this.cartService.getItems();
