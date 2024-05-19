@@ -2,8 +2,8 @@
   <h1>SHOP</h1>
 </a>
 
-<a *ngIf="!this.authService.userValue" routerLink="/login" class="button fancy-button"><i class="material-icons">person</i>Login</a>
-<a *ngIf="this.authService.userValue" routerLink="/admin"  class="button fancy-button"><i class="material-icons">shield</i>Admin</a>
+<a *ngIf="!authService.userValue" routerLink="/login" class="button fancy-button"><i class="material-icons">person</i>Login</a>
+<a *ngIf="authService.userValue" routerLink="/admin"  class="button fancy-button"><i class="material-icons">shield</i>Admin</a>
 
 <a routerLink="/cart" class="button fancy-button"><i class="material-icons">shopping_cart</i>Checkout</a>
-<a *ngIf="this.authService.userValue" (click)="this.authService.logout()"   class="button fancy-button"><i class="material-icons">logout</i>Logout</a>
+<a *ngIf="authService.userValue" (click)="authService.logout()"   class="button fancy-button"><i class="material-icons">logout</i>Logout</a>

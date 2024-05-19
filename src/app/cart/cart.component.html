@@ -16,7 +16,7 @@ We have recieved your request. Will get touch with you very soon.
   <div [hidden]="formDir.submitted">
     <div class="form-group">
       <label for="firstname">First Name</label>
-      <input type="text" id="firstname" [value]="this.user?.firstName || ''" class="form-control"
+      <input type="text" id="firstname" [value]="user?.firstName || ''" class="form-control"
             formControlName="firstname" required>
 
       <div *ngIf="firstname?.invalid && (firstname?.dirty || firstname?.touched)"
@@ -34,7 +34,7 @@ We have recieved your request. Will get touch with you very soon.
  
     <div class="form-group">
       <label for="lastname">Last Name</label>
-      <input type="text" id="lastname" [value]="this.user?.lastName||''" class="form-control"
+      <input type="text" id="lastname" [value]="user?.lastName||''" class="form-control"
             formControlName="lastname" required>
 
       <div *ngIf="lastname?.invalid && (lastname?.dirty || lastname?.touched)"
@@ -52,7 +52,7 @@ We have recieved your request. Will get touch with you very soon.
 
     <div class="form-group">
       <label for="email">email</label>
-      <input type="text" id="email" [value]="this.user?.email||''" class="form-control"
+      <input type="text" id="email" [value]="user?.email||''" class="form-control"
             formControlName="email" required>
 
       <div *ngIf="email?.invalid && (email?.dirty || email?.touched)"

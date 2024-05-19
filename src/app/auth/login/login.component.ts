@@ -3,6 +3,7 @@ import { AuthService } from '../../_service/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User,Role } from 'src/app/_models/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
   passwordError: boolean = false;
   message: string = "";
   loginForm!: FormGroup;
+  subs: Subscription = new Subscription();
 
   constructor(        
     public authService: AuthService, 
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.value) {
       let user:User = this.loginForm.value as User
-      this.authService.login(user.username, user.password).subscribe(ret=>{
+      this.subs.add(this.authService.login(user.username, user.password).subscribe(ret=>{
         if (!ret) {
           this.message = "Username and Password are not matched!"
         } else {
@@ -49,11 +51,15 @@ export class LoginComponent implements OnInit {
           url = "/cart";
         }
         this.router.navigate([url]);
-      });
+      }));
     }
   }
 
   logout() {
     this.authService.logout();
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }

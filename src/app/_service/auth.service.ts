@@ -68,7 +68,7 @@ export class AuthService {
   getUsersByUsername(username: string): Observable<User[]> {
     return this.http.get<User[]>(this.usernameUrl + username)
       .pipe(
-        tap(_ => console.log('fetched users')),
+        tap(() => console.log('fetched users')),
         catchError(this.handleError<User[]>('getUsers', []))
       );
   }
@@ -81,10 +81,10 @@ export class AuthService {
       );
   }
 
-  getUsersById(id: number|undefined): Observable<User> {
+  getUsersById(id: number): Observable<User> {
     return this.http.get<User>(this.usersUrl + "/" + id)
       .pipe(
-        tap(_ => console.log('fetched users')),
+        tap(() => console.log('fetched users')),
         catchError(this.handleError<User>('getUsers'))
       );
   }

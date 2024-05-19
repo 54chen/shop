@@ -3,6 +3,7 @@ import { Product } from 'src/app/_models/product';
 
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from 'src/app/_service/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product',
@@ -12,6 +13,7 @@ import { ProductService } from 'src/app/_service/product.service';
 export class ProductComponent implements OnInit {
   products: Product[] = [];
   editProduct: Product | undefined; // the product currently being edited
+  subs: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -27,9 +29,9 @@ export class ProductComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe(
+    this.subs.add(this.productService.getProducts().subscribe(
       products => (this.products = products)
-    );
+    ));
   }
 
   share() {
@@ -92,6 +94,9 @@ export class ProductComponent implements OnInit {
     this.productService
       .deleteProduct(product.id)
       .subscribe();
+  }
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
 

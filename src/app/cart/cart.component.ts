@@ -5,6 +5,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User } from '../_models/user';
 import { OrderService } from '../_service/order.service';
 import { Order } from '../_models/order';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -15,6 +16,7 @@ export class CartComponent implements OnInit {
   user:User|undefined;
   result = "";
   cartForm!: FormGroup;
+  subs: Subscription = new Subscription();
 
   constructor(
     private cartService: CartService,
@@ -24,7 +26,7 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.result="";
-    this.authService.getUsersById(this.authService.userValue?.id).subscribe(u=>this.user = u);
+    this.subs.add(this.authService.getUsersById(this.authService.userValue!.id).subscribe(u=>this.user = u));
     this.cartForm = new FormGroup({
       firstname: new FormControl('',[Validators.required, Validators.minLength(1)]),
       lastname: new FormControl('',[Validators.required, Validators.minLength(1)]),
@@ -40,9 +42,9 @@ export class CartComponent implements OnInit {
   onSubmit() {
     if (this.cartForm.value) {
       const formData = this.cartForm.value;
-      this.authService.updateUser({...this.user as User, firstName:formData.firstname, lastName: formData.lastname, email: formData.email}).subscribe(
+      this.subs.add(this.authService.updateUser({...this.user as User, firstName:formData.firstname, lastName: formData.lastname, email: formData.email}).subscribe(
         user => {this.user = user;}
-      );
+      ));
 
       let orders: Order[] = [];
       this.items.map(cart=>{
@@ -67,7 +69,7 @@ export class CartComponent implements OnInit {
         return acc;
       }, os);
       os.map(o=>{
-        this.orderService.postOrder(o).subscribe();
+        this.subs.add(this.orderService.postOrder(o).subscribe());
       });
       this.result = "R";
       this.cartService.clearCart();
@@ -84,4 +86,8 @@ export class CartComponent implements OnInit {
   get email() {
     return this.cartForm.get('email');
   }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  } 
 }

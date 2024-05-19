@@ -6,6 +6,7 @@ import { OrderService } from 'src/app/_service/order.service';
 import { ProductService } from 'src/app/_service/product.service';
 import { AuthService } from 'src/app/_service/auth.service';
 import { User } from 'src/app/_models/user';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class OrderComponent implements OnInit {
   user: User|undefined;
   history: History[] = [];
   products: Product[]|undefined;
+  subs: Subscription = new Subscription();
 
   constructor(
     private orderService: OrderService,
@@ -35,16 +37,16 @@ export class OrderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.orderService.getOrders().subscribe(
+    this.subs.add(this.orderService.getOrders().subscribe(
       orders => (this.orders = orders) 
-    );
+    ));
   }
 
   delete(order: Order) {
     this.orders = this.orders.filter(p => p !== order);
-    this.orderService
+    this.subs.add(this.orderService
       .deleteOrder(order.id)
-      .subscribe();
+      .subscribe());
   }
 
   show(order: Order) {
@@ -52,17 +54,20 @@ export class OrderComponent implements OnInit {
     let userId = order.owner;
     let time = order.time;
 
-    let user$ = this.authService.getUsersById(userId);
+    let user$ = this.authService.getUsersById(userId!);
     let orders$ = this.orderService.getOrdersByUserAndTime(userId, time);
-    user$.subscribe(u => this.user = u);
-    orders$.subscribe(os=>{
+    this.subs.add(user$.subscribe(u => this.user = u));
+    this.subs.add(orders$.subscribe(os=>{
       os.map(o=>{
-        this.productService.getProductsById(o.sku).subscribe(p=>{
+        this.subs.add(this.productService.getProductsById(o.sku).subscribe(p=>{
           let h:History = {sku: o.sku, name: p.name, price: o.price, current: p.price,time: o.time,count: o.count} as History
           this.history.push(h);
-        });
+        }));
       });
-    });
+    }));
+  }
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 }
 
